@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Webpage</title>
+
+        <script >
+
+          window.onpopstate = function(e){
+            data = e.state;
+            document.title = data.title;
+            document.querySelector("#caja").innerHTML = data.text;
+          }
+
+          document.addEventListener('DOMContentLoaded',function(){
+            cargar_page('first');
+            document.querySelectorAll('.nav-link').forEach(function(elemento){
+              elemento.onclick = function(){
+                cargar_page(elemento.dataset.page);
+                return false;
+              }
+            })
+          })
+
+          function cargar_page(nombre){
+
+            const request = new XMLHttpRequest();
+            request.open('GET',`/${nombre}`)
+            request.onload = function(){
+              const respuesta = request.responseText;
+              document.querySelector('#caja').innerHTML = respuesta;
+
+              //MOSTRAR URL
+              document.title = nombre;
+
+              history.pushState({'title': nombre,'text':respuesta},nombre,nombre);//(datos,nombre_tiutlo,url)
+            };
+            request.send();
+          }
+
+
+          window.onscroll = () => {
+              console.log('----');
+              console.log(window.innerHeight);
+              console.log(window.scrollY);
+              console.log(document.body.offsetHeight);
+              if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                  document.querySelector('body').style.background = 'green';
+              } else {
+                  document.querySelector('body').style.background = 'white';
+              }
+          };
+
+        </script>
+    </head>
+    <body>
+        <ul id="nav">
+            <li><a href="" class="nav-link" data-page="first">First Page</a></li>
+            <li><a href="" class="nav-link" data-page="second">Second Page</a></li>
+            <li><a href="" class="nav-link" data-page="third">Third Page</a></li>
+            <li> <a href="{{url_for('scroll')}}">SCROLL</a> </li>
+        </ul>
+        <hr>
+
+      <div id="caja">
+
+      </div>
+
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+        <p>1</p>
+    </body>
+</html>

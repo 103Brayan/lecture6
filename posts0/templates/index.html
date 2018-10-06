@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Webpage</title>
+        <style>
+            .post {
+
+                background-color: #fff207;
+                padding: 30px;
+                margin: 15px;
+            }
+
+            body {
+                padding-bottom: 50px;
+
+            }
+        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+        <script id="post" type="text/x-handlebars-template">
+            <div class="post">
+                {% raw -%}
+                    {{ contents }}
+                {%- endraw %}
+                <button class="btn float-right bg-primary">Hide</button>
+            </div>
+        </script>
+
+
+        <script>
+
+            // Start with first post.
+            let counter = 1;
+
+            // Load posts 20 at a time.
+            const quantity = 20;
+
+            // When DOM loads, render the first 20 posts.
+            document.addEventListener('DOMContentLoaded', load);
+
+            // If scrolled to bottom, load the next 20 posts.
+            window.onscroll = () => {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                    load();
+                }
+            };
+
+            // Load next set of posts.
+            function load() {
+
+                // Set start and end post numbers, and update counter.
+                const start = counter;
+                const end = start + quantity - 1;
+                counter = end + 1;
+
+                // Open new request to get new posts.
+                const request = new XMLHttpRequest();
+                request.open('POST', '/posts');
+                request.onload = () => {
+                    const data = JSON.parse(request.responseText);
+                    data.forEach(add_post);
+                };
+
+                // Add start and end points to request data.
+                const data = new FormData();
+                data.append('start', start);
+                data.append('end', end);
+
+                // Send request.
+                request.send(data);
+            };
+
+
+            document.addEventListener('click', event => {
+                const element = event.target;
+                if (element.className === 'btn float-right bg-primary') {
+                    element.parentElement.remove();
+                }
+            });
+
+            // Add a new post with given contents to DOM.
+            // Add a new post with given contents to DOM.
+            const post_template = Handlebars.compile(document.querySelector('#post').innerHTML);
+            function add_post(contents) {
+                /*
+                // Create new post.
+                const post = document.createElement('div');
+                post.className = 'post';
+                post.innerHTML = contents;
+
+
+                const hide = document.createElement('button');
+                hide.className = 'btn float-right bg-primary';
+                hide.innerHTML = 'HIDE';
+                post.append(hide)
+
+                hide.onclick  = function(){
+                  post.remove();
+                }
+                // Add post to DOM.
+                document.querySelector('#posts').append(post);
+                */
+
+                // Create new post.
+                const post = post_template({'contents': contents});
+
+                // Add post to DOM.
+                document.querySelector('#posts').innerHTML += post;
+
+            };
+        </script>
+
+    </head>
+    <body>
+
+
+
+        <div id="posts">
+        </div>
+    </body>
+</html>
